@@ -117,7 +117,7 @@ export default function Dashboard(props) {
         </thead>
         <tbody>
           {users.map((x, i) => (
-            <tr className="text-left border border-gray-400">
+            <tr key={i} className="text-left border border-gray-400">
               <td className="py-2 px-4">{x.userName}</td>
               <td className="py-2 px-4">{x.email}</td>
               {editIndex !== i ? (
@@ -129,7 +129,6 @@ export default function Dashboard(props) {
                     id="roles"
                     className="text-gray-900"
                     value={newRole}
-                    defaultValue={null}
                     onChange={(e) => setNewRole(e.target.value)}
                   >
                     <option value="">-</option>

@@ -56,7 +56,7 @@ export default function Profile() {
   }
 
   return (
-    <div class="flex items-center w-full justify-center mt-8">
+    <div className="flex items-center w-full justify-center mt-8">
       {!showEdit ? (
         <div className="w-1/4">
           <div className="bg-white shadow-xl rounded-lg py-3">

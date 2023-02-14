@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 export function showMessage(value) {
   const element = value.show ? (
@@ -16,8 +16,12 @@ export function showMessage(value) {
   ) : (
     ""
   );
-  ReactDOM.render(element, document.getElementById("showMessage"));
+
+  const container = document.getElementById("showMessage");
+  const root = createRoot(container);
+  root.render(element);
+
   setTimeout(() => {
-    ReactDOM.render("", document.getElementById("showMessage"));
+    root.render(<div />);
   }, 3000);
 }
