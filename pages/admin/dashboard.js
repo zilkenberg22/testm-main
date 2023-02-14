@@ -12,20 +12,27 @@ export default function Dashboard(props) {
   }, []);
 
   function getAllUser() {
-    axios
-      .get("/api/admin/getAll")
-      .then((response) => {
-        setUsers([...response.data.users]);
-      })
-      .catch((error) => {
-        if (error.response?.status === 401) {
-          showMessage({
-            show: true,
-            message: error.response.data.message,
-            type: "warning",
-          });
-        }
-      });
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      axios
+        .get("/api/admin/getAll", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((response) => {
+          setUsers([...response.data.users]);
+        })
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            showMessage({
+              show: true,
+              message: error.response.data.message,
+              type: "warning",
+            });
+          }
+        });
+    }
   }
 
   function editUser(user, index) {
@@ -37,17 +44,17 @@ export default function Dashboard(props) {
     let newUser = user;
     newUser.roles[0] = newRole;
 
+    const accessToken = localStorage.getItem("accessToken");
+
     let option = {
       headers: {
-        "Cache-Control": "no-cache",
-        Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-      timeout: 30000,
     };
 
     axios
-      .post("/api/editUser", newUser, option)
+      .post("/api/admin/editUser", newUser, option)
       .then((response) => {
         setEditIndex(null);
         setNewRole(null);
@@ -72,11 +79,8 @@ export default function Dashboard(props) {
   function deleteUser(user) {
     let option = {
       headers: {
-        "Cache-Control": "no-cache",
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      timeout: 30000,
     };
 
     axios

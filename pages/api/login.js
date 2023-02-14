@@ -26,7 +26,6 @@ export default async function handler(req, res) {
       accessToken,
       refreshToken,
       message: "Амжилттай нэвтэрлээ",
-      data: user,
     });
   } catch (err) {
     res

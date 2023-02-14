@@ -11,45 +11,39 @@ export default function Navbar({ children }) {
   const { ctxData, changeCtxData } = ctx;
 
   async function logout() {
-    let option = {
-      headers: {
-        "Cache-Control": "no-cache",
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${
-          ctxData.isLogged ? ctxData.loggedUserData.accessToken : ""
-        }`,
-      },
-      timeout: 30000,
-    };
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      let option = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    axios
-      .post(
-        "/api/logout",
-        JSON.stringify(ctxData.loggedUserData.refreshToken),
-        option
-      )
-      .then((response) => {
-        ctxData.loggedUserData = null;
-        ctxData.isAdmin = false;
-        ctxData.isLogged = false;
-        changeCtxData();
-        showMessage({
-          show: true,
-          message: response.data.message,
-          type: "success",
-        });
-        router.push("/");
-      })
-      .catch((error) => {
-        if (error.response?.status === 401) {
+      axios
+        .post("/api/logout", refreshToken, option)
+        .then((response) => {
+          ctxData.loggedUserData = null;
+          ctxData.isAdmin = false;
+          ctxData.isLogged = false;
+          changeCtxData();
           showMessage({
             show: true,
-            message: error.response.data.message,
-            type: "warning",
+            message: response.data.message,
+            type: "success",
           });
-        }
-      });
+          localStorage.clear();
+          router.push("/");
+        })
+        .catch((error) => {
+          if (error.response?.status === 401) {
+            showMessage({
+              show: true,
+              message: error.response.data.message,
+              type: "warning",
+            });
+          }
+        });
+    }
   }
 
   return (

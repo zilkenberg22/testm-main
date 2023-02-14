@@ -1,36 +1,22 @@
 import dbConnect from "../../../server/dbConnect";
 import User from "../../../models/User";
-import bcrypt from "bcrypt";
-import generateTokens from "../../../tools/generateTokens";
+import { verifyAccessToken } from "../../../middleware/auth";
 
-export default async function handler(req, res) {
+export default (req, res) => {
+  verifyAccessToken(req, res, () => {
+    handler(req, res);
+  });
+};
+
+async function handler(req, res) {
   await dbConnect();
-
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user)
-      return res
-        .status(401)
-        .json({ error: true, message: "Invalid email or password" });
-
-    const verifiedPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!verifiedPassword)
-      return res
-        .status(401)
-        .json({ error: true, message: "Invalid email or password" });
-
-    const { accessToken, refreshToken } = await generateTokens(user);
-
-    res.status(200).json({
-      error: false,
-      accessToken,
-      refreshToken,
-      message: "Logged in sucessfully",
-      data: user,
-    });
+    const accessToken = req.headers.authorization.split(" ")[1];
+    const user = await User.findOne({ accessToken, _id: req.user._id });
+    if (!user) {
+      return res.status(401).send({ message: "Unauthorized" });
+    }
+    res.send(user);
   } catch (err) {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }

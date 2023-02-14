@@ -9,8 +9,6 @@ export default function Profile() {
   const [showEdit, setShowEdit] = useState(false);
   const [newData, setNewData] = useState({});
 
-  useEffect(() => {}, []);
-
   function editProfile() {
     setShowEdit(true);
     setNewData(ctxData.loggedUserData);
@@ -21,20 +19,18 @@ export default function Profile() {
   }
 
   function updateData() {
+    const accessToken = localStorage.getItem("accessToken");
     let option = {
       headers: {
-        "Cache-Control": "no-cache",
-        Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-      timeout: 30000,
     };
 
     axios
       .post("/api/editUser", newData, option)
       .then((response) => {
-        ctxData.loggedUserData = response.data.data;
-        changeCtxData();
+        ctx.getUserData();
         showMessage({
           show: true,
           message: response.data.message,
@@ -102,7 +98,7 @@ export default function Profile() {
                       Phone
                     </td>
                     <td className="px-2 py-2 text-gray-500">
-                      {ctxData.loggedUserData?.phone}
+                      {ctxData.loggedUserData?.phoneNumber}
                     </td>
                   </tr>
                   <tr>
@@ -183,16 +179,16 @@ export default function Profile() {
             <div className="mb-6">
               <label
                 className="block text-gray-700 font-medium mb-2"
-                htmlFor="phoneNuber"
+                htmlFor="phoneNumber"
               >
                 Phone Number
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                id="phoneNuber"
+                id="phoneNumber"
                 type="number"
-                name="phoneNuber"
-                value={newData?.phoneNuber}
+                name="phoneNumber"
+                value={newData?.phoneNumber}
                 onChange={handleChange}
               />
             </div>

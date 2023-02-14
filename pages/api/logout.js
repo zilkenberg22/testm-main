@@ -1,21 +1,27 @@
 import dbConnect from "../../server/dbConnect";
 import UserToken from "../../models/UserToken";
+import { verifyRefreshToken } from "../../middleware/auth";
 
-export default async function handler(req, res) {
+export default (req, res) => {
+  verifyRefreshToken(req, res, () => {
+    handler(req, res);
+  });
+};
+
+async function handler(req, res) {
   await dbConnect();
-
   try {
-    // const userToken = await UserToken.findOneAndDelete({ token: req.body.refreshToken });
-    // if (!userToken) return res.status(200).json({ error: false, message: "Системээс гарлаа" });
-
-    const userToken = await UserToken.findOne({ token: req.body.refreshToken });
+    const refreshToken = req.body;
+    const userToken = await UserToken.findOne({
+      token: refreshToken,
+    });
     if (!userToken)
       return res
         .status(200)
-        .json({ error: false, message: "Logged Out Sucessfully" });
+        .json({ error: false, message: "Системээс гарлаа" });
 
     await userToken.remove();
-    res.status(200).json({ error: false, message: "Logged Out Sucessfully" });
+    res.status(200).json({ error: false, message: "Системээс гарлаа" });
   } catch (err) {
     res
       .status(500)

@@ -1,6 +1,6 @@
-import dbConnect from "../../server/dbConnect";
-import User from "../../models/User";
-import { verifyAccessToken } from "../../middleware/auth";
+import dbConnect from "../../../server/dbConnect";
+import User from "../../../models/User";
+import { verifyAccessToken } from "../../../middleware/auth";
 
 export default (req, res) => {
   verifyAccessToken(req, res, () => {
@@ -11,8 +11,7 @@ export default (req, res) => {
 async function handler(req, res) {
   try {
     await dbConnect();
-    console.log(req, "req-----");
-    const user = await User.findByIdAndUpdate(req.user._id, req.body);
+    const user = await User.findByIdAndUpdate(req.body._id, req.body);
     if (!user)
       return res
         .status(401)

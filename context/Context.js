@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 export const Ctx = createContext({});
 
 export default function Context(props) {
@@ -23,7 +24,29 @@ export default function Context(props) {
     if (!allowed) router.push("/");
   }, [allowed]);
 
-  console.log(ctxData, "ctxData");
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  function getUserData() {
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (accessToken) {
+      axios
+        .get("/api/user", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          ctxData.loggedUserData = res.data;
+          changeCtxData();
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    }
+  }
 
   useEffect(() => {
     if (ctxData.loggedUserData !== null) {
@@ -43,7 +66,7 @@ export default function Context(props) {
   }
 
   return (
-    <Ctx.Provider value={{ ctxData, changeCtxData }}>
+    <Ctx.Provider value={{ ctxData, changeCtxData, getUserData }}>
       <Navbar>{allowed && props.children}</Navbar>
     </Ctx.Provider>
   );
