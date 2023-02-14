@@ -48,6 +48,8 @@ export default function Context(props) {
     }
   }
 
+  console.log(ctxData, "ctxData");
+
   useEffect(() => {
     if (ctxData.loggedUserData !== null) {
       if (ctxData.loggedUserData.roles[0] === "admin") ctxData.isAdmin = true;
