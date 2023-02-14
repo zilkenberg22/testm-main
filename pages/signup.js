@@ -122,6 +122,11 @@ export default function Signup() {
             required
           />
         </div>
+        <input
+          type="hidden"
+          name="csrf"
+          value="Fijd93djskDsdis9wijdSD938jISdj93jdISdj9s"
+        />
         <div className="flex items-center justify-between">
           <button
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
