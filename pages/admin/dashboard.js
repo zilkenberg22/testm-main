@@ -37,12 +37,12 @@ export default function Dashboard(props) {
 
   function editUser(user, index) {
     setEditIndex(index);
-    setNewRole(user.roles[0]);
+    setNewRole(user.roles);
   }
 
   function updateUser(user, index) {
     let newUser = user;
-    newUser.roles[0] = newRole;
+    newUser.roles = newRole;
 
     const accessToken = localStorage.getItem("accessToken");
 
@@ -121,7 +121,7 @@ export default function Dashboard(props) {
               <td className="py-2 px-4">{x.userName}</td>
               <td className="py-2 px-4">{x.email}</td>
               {editIndex !== i ? (
-                <td className="py-2 px-4">{x.roles[0]}</td>
+                <td className="py-2 px-4">{x.roles}</td>
               ) : (
                 <td className="py-2 px-4">
                   <select

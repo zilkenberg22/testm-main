@@ -9,7 +9,6 @@ export default async function handler(req, res) {
     const data = { userName, email, password };
 
     const user = await User.findOne({ email: email });
-
     if (user)
       return res
         .status(400)
@@ -18,7 +17,11 @@ export default async function handler(req, res) {
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
     const hashPassword = await bcrypt.hash(password, salt);
 
+    console.log(data, "data");
+    console.log(hashPassword, "hashPassword");
+
     await new User({ ...data, password: hashPassword }).save();
+    console.log("first111");
 
     res.status(201).json({ error: false, message: "Бүртгэл амжилттай" });
   } catch (err) {

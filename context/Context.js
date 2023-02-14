@@ -52,7 +52,7 @@ export default function Context(props) {
 
   useEffect(() => {
     if (ctxData.loggedUserData !== null) {
-      if (ctxData.loggedUserData.roles[0] === "admin") ctxData.isAdmin = true;
+      if (ctxData.loggedUserData.roles === "admin") ctxData.isAdmin = true;
       else ctxData.isAdmin = false;
       ctxData.isLogged = true;
     } else {

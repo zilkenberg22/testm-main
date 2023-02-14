@@ -81,7 +81,7 @@ export default function Profile() {
                 {ctxData.loggedUserData?.userName}
               </h3>
               <div className="text-center text-gray-400 text-xs font-semibold">
-                <p>{ctxData.loggedUserData?.roles[0]}</p>
+                <p>{ctxData.loggedUserData?.roles}</p>
               </div>
               <table className="text-xs my-3">
                 <tbody>
