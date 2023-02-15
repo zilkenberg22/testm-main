@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { showMessage } from "./message";
 import { Ctx } from "../context/Context";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 export default function Navbar({ children }) {
   const router = useRouter();
@@ -11,8 +12,10 @@ export default function Navbar({ children }) {
   const { ctxData, changeCtxData } = ctx;
 
   async function logout() {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (refreshToken) {
+    const refreshToken = Cookies.get("refreshToken");
+    const accessToken = Cookies.get("accessToken");
+
+    if (accessToken !== undefined) {
       let option = {
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +34,8 @@ export default function Navbar({ children }) {
             message: response.data.message,
             type: "success",
           });
-          localStorage.clear();
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
           router.push("/");
         })
         .catch((error) => {
@@ -43,7 +47,7 @@ export default function Navbar({ children }) {
             });
           }
         });
-    }
+    } else ctx.clearAll();
   }
 
   return (

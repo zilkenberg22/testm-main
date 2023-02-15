@@ -21,6 +21,7 @@ export default async function handler(req, res) {
         .json({ error: true, message: "И-Майл эсвэл нууц үг таарахгүй байна" });
 
     const { accessToken, refreshToken } = await generateTokens(user);
+
     res.status(200).json({
       error: false,
       accessToken,
@@ -28,8 +29,6 @@ export default async function handler(req, res) {
       message: "Амжилттай нэвтэрлээ",
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: true, message: "Сервер ачааллах боломжгүй байна" });
+    res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }

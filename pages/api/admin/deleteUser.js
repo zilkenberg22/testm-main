@@ -10,8 +10,8 @@ export default async function handler(req, res) {
       res
         .status(200)
         .json({ success: true, message: "Хэрэглэгчийн мэдээллийг устгалаа" });
-    else res.status(500).json({ success: false, message: "aldaa" });
+    else res.status(500).json({ success: false, message: "алдаа гарлаа :( " });
   } catch (error) {
-    res.status(400).json({ success: false });
+    res.status(500).json({ success: false, message: "алдаа гарлаа :( " });
   }
 }

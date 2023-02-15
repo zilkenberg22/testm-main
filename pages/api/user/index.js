@@ -3,9 +3,11 @@ import User from "../../../models/User";
 import { verifyAccessToken } from "../../../middleware/auth";
 
 export default (req, res) => {
-  verifyAccessToken(req, res, () => {
-    handler(req, res);
-  });
+  try {
+    verifyAccessToken(req, res, () => {
+      handler(req, res);
+    });
+  } catch (error) {}
 };
 
 async function handler(req, res) {

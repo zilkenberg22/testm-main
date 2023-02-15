@@ -23,8 +23,6 @@ async function handler(req, res) {
     await userToken.remove();
     res.status(200).json({ error: false, message: "Системээс гарлаа" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: true, message: "Сервер ачааллах боломжгүй байна" });
+    res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }

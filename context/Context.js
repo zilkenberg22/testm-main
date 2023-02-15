@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { showMessage } from "../components/message";
 export const Ctx = createContext({});
 
 export default function Context(props) {
@@ -29,9 +31,9 @@ export default function Context(props) {
   }, []);
 
   function getUserData() {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
 
-    if (accessToken) {
+    if (accessToken !== undefined) {
       axios
         .get("/api/user", {
           headers: {
@@ -43,9 +45,29 @@ export default function Context(props) {
           changeCtxData();
         })
         .catch((err) => {
-          console.log(err, "err");
+          showMessage({
+            show: true,
+            message: err.response.data.message,
+            type: "warning",
+          });
+          clearAll();
         });
     }
+  }
+
+  function clearAll() {
+    showMessage({
+      show: true,
+      message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү ",
+      type: "warning",
+    });
+    ctxData.loggedUserData = null;
+    ctxData.isAdmin = false;
+    ctxData.isLogged = false;
+    changeCtxData();
+    router.push("/login");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
   }
 
   console.log(ctxData, "ctxData");
@@ -68,7 +90,7 @@ export default function Context(props) {
   }
 
   return (
-    <Ctx.Provider value={{ ctxData, changeCtxData, getUserData }}>
+    <Ctx.Provider value={{ ctxData, changeCtxData, getUserData, clearAll }}>
       <Navbar>{allowed && props.children}</Navbar>
     </Ctx.Provider>
   );

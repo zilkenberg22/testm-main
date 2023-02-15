@@ -21,8 +21,6 @@ async function handler(req, res) {
       message: "Амжилттай заслаа",
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: true, message: "Сервер ачааллах боломжгүй байна" });
+    res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }

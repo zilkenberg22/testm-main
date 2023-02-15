@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
+import axios from "axios";
 import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 
@@ -44,13 +44,7 @@ export default function Signup() {
           router.push("/login");
         })
         .catch((error) => {
-          if (error.response?.status === 401) {
-            showMessage({
-              show: true,
-              message: error.response.data.message,
-              type: "warning",
-            });
-          } else if (error.response?.status === 400) {
+          if (error) {
             showMessage({
               show: true,
               message: error.response.data.message,

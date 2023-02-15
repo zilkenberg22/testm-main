@@ -5,7 +5,10 @@ const verifyAccessToken = async (req, res, next) => {
   if (!token)
     return res
       .status(403)
-      .json({ error: true, message: "Access Denied: No token provided 1" });
+      .json({
+        error: true,
+        message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү",
+      });
 
   try {
     const tokenDetails = jwt.verify(
@@ -17,7 +20,10 @@ const verifyAccessToken = async (req, res, next) => {
   } catch (err) {
     res
       .status(403)
-      .json({ error: true, message: "Access Denied: Invalid token 2" });
+      .json({
+        error: true,
+        message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү",
+      });
   }
 };
 
@@ -26,7 +32,10 @@ const verifyRefreshToken = async (req, res, next) => {
   if (!token)
     return res
       .status(403)
-      .json({ error: true, message: "Access Denied: No token provided 1" });
+      .json({
+        error: true,
+        message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү",
+      });
 
   try {
     const tokenDetails = jwt.verify(
@@ -38,7 +47,10 @@ const verifyRefreshToken = async (req, res, next) => {
   } catch (err) {
     res
       .status(403)
-      .json({ error: true, message: "Access Denied: Invalid token 2" });
+      .json({
+        error: true,
+        message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү",
+      });
   }
 };
 

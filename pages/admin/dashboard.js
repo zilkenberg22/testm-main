@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { showMessage } from "../../components/message";
+import { Ctx } from "../../context/Context";
 
-export default function Dashboard(props) {
+export default function Dashboard() {
+  const ctx = useContext(Ctx);
   const [users, setUsers] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [newRole, setNewRole] = useState(null);
@@ -12,8 +15,8 @@ export default function Dashboard(props) {
   }, []);
 
   function getAllUser() {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken !== undefined) {
       axios
         .get("/api/admin/getAll", {
           headers: {
@@ -32,7 +35,7 @@ export default function Dashboard(props) {
             });
           }
         });
-    }
+    } else ctx.clearAll();
   }
 
   function editUser(user, index) {
@@ -40,68 +43,73 @@ export default function Dashboard(props) {
     setNewRole(user.roles);
   }
 
-  function updateUser(user, index) {
+  function updateUser(user) {
     let newUser = user;
     newUser.roles = newRole;
+    const accessToken = Cookies.get("accessToken");
 
-    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken !== undefined) {
+      let option = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
 
-    let option = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-
-    axios
-      .post("/api/admin/editUser", newUser, option)
-      .then((response) => {
-        setEditIndex(null);
-        setNewRole(null);
-        showMessage({
-          show: true,
-          message: response.data.message,
-          type: "success",
-        });
-        getAllUser();
-      })
-      .catch((error) => {
-        if (error) {
+      axios
+        .post("/api/admin/editUser", newUser, option)
+        .then((response) => {
+          setEditIndex(null);
+          setNewRole(null);
           showMessage({
             show: true,
-            message: error.response.data.message,
-            type: "warning",
+            message: response.data.message,
+            type: "success",
           });
-        }
-      });
+          getAllUser();
+        })
+        .catch((error) => {
+          if (error) {
+            showMessage({
+              show: true,
+              message: error.response.data.message,
+              type: "warning",
+            });
+          }
+        });
+    } else ctx.clearAll();
   }
 
   function deleteUser(user) {
-    let option = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken !== undefined) {
+      let option = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
 
-    axios
-      .post("/api/admin/deleteUser", user, option)
-      .then((response) => {
-        showMessage({
-          show: true,
-          message: response.data.message,
-          type: "success",
-        });
-        getAllUser();
-      })
-      .catch((error) => {
-        if (error) {
+      axios
+        .post("/api/admin/deleteUser", user, option)
+        .then((response) => {
           showMessage({
             show: true,
-            message: error.response.data.message,
-            type: "warning",
+            message: response.data.message,
+            type: "success",
           });
-        }
-      });
+          getAllUser();
+        })
+        .catch((error) => {
+          if (error) {
+            showMessage({
+              show: true,
+              message: error.response.data.message,
+              type: "warning",
+            });
+          }
+        });
+    } else ctx.clearAll();
   }
 
   return (

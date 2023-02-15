@@ -1,11 +1,12 @@
+import React, { useContext, useState } from "react";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
 
 export default function Profile() {
   const ctx = useContext(Ctx);
-  const { ctxData, changeCtxData } = ctx;
+  const { ctxData } = ctx;
   const [showEdit, setShowEdit] = useState(false);
   const [newData, setNewData] = useState({});
 
@@ -19,35 +20,40 @@ export default function Profile() {
   }
 
   function updateData() {
-    const accessToken = localStorage.getItem("accessToken");
-    let option = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+    const accessToken = Cookies.get("accessToken");
 
-    axios
-      .post("/api/editUser", newData, option)
-      .then((response) => {
-        ctx.getUserData();
-        showMessage({
-          show: true,
-          message: response.data.message,
-          type: "success",
-        });
-        setShowEdit(false);
-        setNewData({});
-      })
-      .catch((error) => {
-        if (error) {
+    if (accessToken !== undefined) {
+      let option = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+
+      axios
+        .post("/api/editUser", newData, option)
+        .then((response) => {
+          ctx.getUserData();
           showMessage({
             show: true,
-            message: error.response.data.message,
-            type: "warning",
+            message: response.data.message,
+            type: "success",
           });
-        }
-      });
+          setShowEdit(false);
+          setNewData({});
+        })
+        .catch((error) => {
+          if (error.response.status === 403) {
+            ctx.clearAll(error);
+          } else {
+            showMessage({
+              show: true,
+              message: error.response.data.message,
+              type: "warning",
+            });
+          }
+        });
+    } else ctx.clearAll();
   }
 
   function back() {

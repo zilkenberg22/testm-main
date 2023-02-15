@@ -13,8 +13,8 @@ async function handler(req, res) {
     await dbConnect();
     const users = await User.find({});
     if (users) res.status(200).json({ success: true, users });
-    else res.status(500).json({ success: false, message: "aldaa" });
+    else res.status(500).json({ success: false, message: "Алдаа гарлаа :( " });
   } catch (error) {
-    res.status(400).json({ success: false });
+    res.status(500).json({ success: false, message: "Алдаа гарлаа :( " });
   }
 }

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { loginValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
@@ -8,7 +9,6 @@ import { Ctx } from "../context/Context";
 export default function Login() {
   const router = useRouter();
   const ctx = useContext(Ctx);
-  const { ctxData, changeCtxData } = ctx;
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -20,10 +20,7 @@ export default function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    loginData();
-  }
 
-  async function loginData() {
     const err = loginValidate(form);
     if (err?.error) {
       showMessage({ show: true, message: err.message, type: "warning" });
@@ -39,11 +36,15 @@ export default function Login() {
     axios
       .post("/api/login", JSON.stringify(form), option)
       .then((response) => {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
-
+        var accessTokenTime = new Date();
+        accessTokenTime.setTime(accessTokenTime.getTime() + 30 * 1000);
+        Cookies.set("accessToken", response.data.accessToken, {
+          expires: accessTokenTime,
+        });
+        Cookies.set("refreshToken", response.data.refreshToken, {
+          expires: 1,
+        });
         ctx.getUserData();
-
         setForm({ userName: "", email: "", password: "" });
 
         showMessage({
@@ -55,7 +56,7 @@ export default function Login() {
         router.push("/");
       })
       .catch((error) => {
-        if (error.response?.status === 401) {
+        if (error) {
           showMessage({
             show: true,
             message: error.response.data.message,

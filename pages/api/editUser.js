@@ -11,7 +11,6 @@ export default (req, res) => {
 async function handler(req, res) {
   try {
     await dbConnect();
-    console.log(req, "req-----");
     const user = await User.findByIdAndUpdate(req.user._id, req.body);
     if (!user)
       return res
@@ -22,8 +21,6 @@ async function handler(req, res) {
       message: "Амжилттай заслаа",
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: true, message: "Сервер ачааллах боломжгүй байна" });
+    res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }
