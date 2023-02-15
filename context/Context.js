@@ -17,6 +17,13 @@ export default function Context(props) {
   let allowed = true;
 
   useEffect(() => {
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken === undefined && ctxData.isLogged) {
+      clearAll();
+    }
+  }, [router]);
+
+  useEffect(() => {
     if (router.pathname.startsWith("/admin") && !ctxData.isAdmin) {
       allowed = false;
     } else if (!ctxData.isLogged) allowed = false;
@@ -61,16 +68,15 @@ export default function Context(props) {
       message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү ",
       type: "warning",
     });
+    if (ctxData.isLogged) router.push("/login");
+    else router.push("/");
     ctxData.loggedUserData = null;
     ctxData.isAdmin = false;
     ctxData.isLogged = false;
     changeCtxData();
-    router.push("/login");
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
   }
-
-  console.log(ctxData, "ctxData");
 
   useEffect(() => {
     if (ctxData.loggedUserData !== null) {

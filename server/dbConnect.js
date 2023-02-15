@@ -32,11 +32,9 @@ async function dbConnect() {
   try {
     cached.conn = await cached.promise;
   } catch (e) {
-    console.log("FAILED CONNECT");
     cached.promise = null;
     throw e;
   }
-  console.log("Холболт амжилттай");
   return cached.conn;
 }
 
