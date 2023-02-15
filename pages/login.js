@@ -37,7 +37,7 @@ export default function Login() {
       .post("/api/login", JSON.stringify(form), option)
       .then((response) => {
         var accessTokenTime = new Date();
-        accessTokenTime.setTime(accessTokenTime.getTime() + 30 * 1000);
+        accessTokenTime.setTime(accessTokenTime.getTime() + 15 * 60 * 1000);
         Cookies.set("accessToken", response.data.accessToken, {
           expires: accessTokenTime,
         });
