@@ -1,14 +1,7 @@
-import csurf from "csurf";
+import { nextCsrf } from "next-csrf";
 
-export function csrf(req, res) {
-  return new Promise((resolve, reject) => {
-    csurf({ cookie: true })(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+const { csrf, setup } = nextCsrf({
+  secret: process.env.CSRF_SECRET,
+});
 
-export default csrf;
+export { csrf, setup };

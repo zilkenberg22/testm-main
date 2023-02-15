@@ -1,19 +1,10 @@
 import bcrypt from "bcrypt";
 import dbConnect from "../../server/dbConnect";
 import User from "../../models/User";
-import csrf from "csurf";
+import { csrf } from "../../tools/csrf";
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   try {
-    const csrfToken = req.headers["csrf-token"];
-
-    console.log(csrfToken, "csrfToken-----API");
-
-    // if (!csrf().verify(csrfToken)) {
-    //   res.status(403).end();
-    //   return;
-    // }
-
     await dbConnect();
     const { userName, email, password } = req.body;
     const data = { userName, email, password };
@@ -34,3 +25,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }
+
+export default csrf(handler);

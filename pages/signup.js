@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import csrf from "../tools/csrf";
+import { setup } from "../tools/csrf";
 import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 
-export default function Signup({ csrfToken }) {
+export default function Signup() {
   const router = useRouter();
   const [form, setForm] = useState({
     userName: "",
@@ -30,7 +30,6 @@ export default function Signup({ csrfToken }) {
       let option = {
         headers: {
           "Content-Type": "application/json",
-          "CSRF-Token": csrfToken,
         },
       };
 
@@ -65,7 +64,6 @@ export default function Signup({ csrfToken }) {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-4">
           <label
             className="block text-gray-700 font-medium mb-2"
@@ -132,11 +130,6 @@ export default function Signup({ csrfToken }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, res } = context;
-
-  await csrf(req, res);
-  return {
-    props: { csrfToken: req.csrfToken() },
-  };
-}
+export const getServerSideProps = setup(async ({ req, res }) => {
+  return { props: {} };
+});

@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { loginValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
+import { setup } from "../tools/csrf";
 
 export default function Login({ csrfToken }) {
   const router = useRouter();
@@ -121,11 +122,6 @@ export default function Login({ csrfToken }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, res } = context;
-
-  await csrf(req, res);
-  return {
-    props: { csrfToken: req.csrfToken() },
-  };
-}
+export const getServerSideProps = setup(async ({ req, res }) => {
+  return { props: {} };
+});
