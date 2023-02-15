@@ -64,20 +64,20 @@ export default function Navbar({ children }) {
           <div className="text-sm lg:flex-grow">
             <Link href="/">
               <p className="block mt-4 text-xl lg:inline-block lg:mt-0 text-indigo-200 hover:text-white mr-4">
-                Home
+                Нүүр хуудас
               </p>
             </Link>
             {ctxData.isAdmin && ctxData.isLogged && (
               <Link href="/admin/dashboard">
                 <p className="block mt-4 text-xl lg:inline-block lg:mt-0 text-indigo-200 hover:text-white mr-4">
-                  Dashboard
+                  Хяналтын самбар
                 </p>
               </Link>
             )}
             {ctxData.isLogged && (
               <Link href="/profile">
                 <p className="block mt-4 text-xl lg:inline-block lg:mt-0 text-indigo-200 hover:text-white mr-4">
-                  Profile
+                  Хувийн мэдээлэл
                 </p>
               </Link>
             )}
@@ -87,12 +87,12 @@ export default function Navbar({ children }) {
               <>
                 <Link href="/login">
                   <p className="inline-block text-sm px-4 py-2 mr-4 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">
-                    Login
+                    Нэвтрэх
                   </p>
                 </Link>
                 <Link href="/signup">
                   <p className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white">
-                    Register
+                    Бүртгүүлэх
                   </p>
                 </Link>
               </>
@@ -100,7 +100,7 @@ export default function Navbar({ children }) {
             {ctxData.isLogged && (
               <Link href="#" onClick={() => logout()}>
                 <p className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-indigo-500 hover:bg-white lg:mt-0">
-                  Logout
+                  Гарах
                 </p>
               </Link>
             )}

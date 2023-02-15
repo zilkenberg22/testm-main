@@ -93,7 +93,7 @@ export default function Profile() {
                 <tbody>
                   <tr>
                     <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Address
+                      Хаяг
                     </td>
                     <td className="px-2 py-2 text-gray-500">
                       {ctxData.loggedUserData?.address}
@@ -101,7 +101,7 @@ export default function Profile() {
                   </tr>
                   <tr>
                     <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Phone
+                      Утас
                     </td>
                     <td className="px-2 py-2 text-gray-500">
                       {ctxData.loggedUserData?.phoneNumber}
@@ -109,7 +109,7 @@ export default function Profile() {
                   </tr>
                   <tr>
                     <td className="px-2 py-2 text-gray-500 font-semibold">
-                      Email
+                      И-Майл
                     </td>
                     <td className="px-2 py-2 text-gray-500">
                       {ctxData.loggedUserData?.email}
@@ -123,7 +123,7 @@ export default function Profile() {
                   className="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium"
                   onClick={() => editProfile()}
                 >
-                  Edit Profile
+                  Мэдээллээ засах
                 </button>
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function Profile() {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="username"
               >
-                Username
+                Хэрэглэгчийн нэр
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -154,7 +154,7 @@ export default function Profile() {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="email"
               >
-                Email
+                И-Майл хаяг
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -171,7 +171,7 @@ export default function Profile() {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="address"
               >
-                Address
+                Хаяг
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -187,7 +187,7 @@ export default function Profile() {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="phoneNumber"
               >
-                Phone Number
+                Утасны дугаар
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -203,13 +203,13 @@ export default function Profile() {
                 className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 onClick={() => updateData()}
               >
-                Update
+                Шинэчлэх
               </button>
               <button
                 className="bg-gray-500 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 onClick={() => back()}
               >
-                Back
+                Буцах
               </button>
             </div>
           </div>

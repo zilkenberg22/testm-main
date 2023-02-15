@@ -77,7 +77,7 @@ export default function Login() {
             className="block text-gray-700 font-medium mb-2"
             htmlFor="email"
           >
-            Email
+            И-Майл хаяг
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -94,7 +94,7 @@ export default function Login() {
             className="block text-gray-700 font-medium mb-2"
             htmlFor="password"
           >
-            Password
+            Нууц үг
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -113,10 +113,10 @@ export default function Login() {
         />
         <div className="flex items-center justify-between">
           <button
-            className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             type="submit"
           >
-            Sign In
+            Нэвтрэх
           </button>
         </div>
       </form>
