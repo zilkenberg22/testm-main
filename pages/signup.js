@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import csrf from "../tools/csrf";
 import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 
-export default function Signup() {
+export default function Signup({ csrfToken }) {
   const router = useRouter();
   const [form, setForm] = useState({
     userName: "",
@@ -29,6 +30,7 @@ export default function Signup() {
       let option = {
         headers: {
           "Content-Type": "application/json",
+          "CSRF-Token": csrfToken,
         },
       };
 
@@ -63,6 +65,7 @@ export default function Signup() {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-4">
           <label
             className="block text-gray-700 font-medium mb-2"
@@ -116,11 +119,6 @@ export default function Signup() {
             required
           />
         </div>
-        <input
-          type="hidden"
-          name="csrf"
-          value="Fijd93djskDsdis9wijdSD938jISdj93jdISdj9s"
-        />
         <div className="flex w-full">
           <button
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
@@ -132,4 +130,13 @@ export default function Signup() {
       </form>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+
+  await csrf(req, res);
+  return {
+    props: { csrfToken: req.csrfToken() },
+  };
 }
