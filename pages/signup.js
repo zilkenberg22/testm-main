@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { setup } from "../tools/csrf";
 import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
+import { csrfMiddleware } from "../tools/csrf";
 
 export default function Signup() {
   const router = useRouter();
@@ -12,6 +12,8 @@ export default function Signup() {
     email: "",
     password: "",
   });
+
+  const csrfToken = csrfMiddleware();
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -64,6 +66,7 @@ export default function Signup() {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
+        <input type="hidden" name="csrf_token" value={csrfToken} />
         <div className="mb-4">
           <label
             className="block text-gray-700 font-medium mb-2"
@@ -129,7 +132,3 @@ export default function Signup() {
     </div>
   );
 }
-
-export const getServerSideProps = setup(async ({ req, res }) => {
-  return { props: {} };
-});
