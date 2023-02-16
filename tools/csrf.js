@@ -1,15 +1,15 @@
 import crypto from "crypto";
 import Tokens from "csrf";
-import Cookies from "js-cookie";
 
 const tokens = new Tokens();
 
-export const csrfMiddleware = () => {
+export const csrfMiddleware = (req, res, next) => {
   const secret =
     process.env.CSRF_SECRET || crypto.randomBytes(16).toString("hex");
   const csrfToken = tokens.create(secret);
-  Cookies.set("csrfToken", csrfToken);
-  return csrfToken;
+  res.setHeader("Set-Cookie", `csrfToken=${csrfToken}; Path=/`);
+  req.csrfToken = csrfToken;
+  next();
 };
 
 export const csrfCheckMiddleware = (req, res, next) => {

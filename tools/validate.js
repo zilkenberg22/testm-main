@@ -24,6 +24,22 @@ function passwordValidate(password) {
   };
 }
 
+function addressValidate(address) {
+  var re = /[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]/;
+  return {
+    error: !re.test(address),
+    message: "Хаяг шаардлага хангаагүй байна.",
+  };
+}
+
+function phoneValidate(phoneNumber) {
+  var re = /^[0-9]{8}/;
+  return {
+    error: !re.test(phoneNumber),
+    message: "Утасны дугаар шаардлага хангаагүй байна.",
+  };
+}
+
 export function signupValidate(form) {
   const userName = userNameValidate(form.userName);
   if (userName?.error) return userName;
@@ -38,4 +54,22 @@ export function signupValidate(form) {
 export function loginValidate(form) {
   const email = emailValidate(form.email);
   if (email?.error) return email;
+}
+
+export function updateValidate(form) {
+  const userName = userNameValidate(form.userName);
+  if (userName?.error) return userName;
+
+  const email = emailValidate(form.email);
+  if (email?.error) return email;
+
+  if (form.address) {
+    const address = addressValidate(form.address);
+    if (address?.error) return address;
+  }
+
+  if (form.phoneNumber) {
+    const phoneNumber = phoneValidate(form.phoneNumber);
+    if (phoneNumber?.error) return phoneNumber;
+  }
 }

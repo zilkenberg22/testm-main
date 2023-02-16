@@ -1,10 +1,13 @@
 import dbConnect from "../../server/dbConnect";
 import User from "../../models/User";
 import { verifyAccessToken } from "../../middleware/auth";
+import { csrfCheckMiddleware } from "../../tools/csrf";
 
 export default (req, res) => {
-  verifyAccessToken(req, res, () => {
-    handler(req, res);
+  csrfCheckMiddleware(req, res, () => {
+    verifyAccessToken(req, res, () => {
+      handler(req, res);
+    });
   });
 };
 

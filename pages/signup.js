@@ -5,15 +5,22 @@ import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { csrfMiddleware } from "../tools/csrf";
 
-export default function Signup() {
+export const getServerSideProps = async (context) => {
+  const { req, res } = context;
+  let csrfToken;
+  csrfMiddleware(req, res, () => {
+    csrfToken = res.req.csrfToken;
+  });
+  return { props: { csrfToken } };
+};
+
+export default function Signup(props) {
   const router = useRouter();
   const [form, setForm] = useState({
     userName: "",
     email: "",
     password: "",
   });
-
-  const csrfToken = csrfMiddleware();
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,7 +73,7 @@ export default function Signup() {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <input type="hidden" name="csrf_token" value={csrfToken} />
+        <input type="hidden" name="csrf_token" value={props.csrfToken} />
         <div className="mb-4">
           <label
             className="block text-gray-700 font-medium mb-2"

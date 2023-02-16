@@ -2,8 +2,15 @@ import bcrypt from "bcrypt";
 import dbConnect from "../../server/dbConnect";
 import User from "../../models/User";
 import generateTokens from "../../tools/generateTokens";
+import { csrfCheckMiddleware } from "../../tools/csrf";
 
-export default async function handler(req, res) {
+export default (req, res) => {
+  csrfCheckMiddleware(req, res, () => {
+    handler(req, res);
+  });
+};
+
+async function handler(req, res) {
   try {
     await dbConnect();
     const { email, password } = req.body;

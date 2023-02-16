@@ -1,11 +1,18 @@
 import bcrypt from "bcrypt";
 import dbConnect from "../../server/dbConnect";
 import User from "../../models/User";
-import { csrf } from "../../tools/csrf";
+import { csrfCheckMiddleware } from "../../tools/csrf";
+
+export default (req, res) => {
+  csrfCheckMiddleware(req, res, () => {
+    handler(req, res);
+  });
+};
 
 async function handler(req, res) {
   try {
     await dbConnect();
+
     const { userName, email, password } = req.body;
     const data = { userName, email, password };
 
@@ -25,5 +32,3 @@ async function handler(req, res) {
     res.status(500).json({ error: true, message: "Алдаа гарлаа :( " });
   }
 }
-
-export default csrf(handler);

@@ -5,9 +5,18 @@ import Cookies from "js-cookie";
 import { loginValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
-import { setup } from "../tools/csrf";
+import { csrfMiddleware } from "../tools/csrf";
 
-export default function Login({ csrfToken }) {
+export const getServerSideProps = async (context) => {
+  const { req, res } = context;
+  let csrfToken;
+  csrfMiddleware(req, res, () => {
+    csrfToken = res.req.csrfToken;
+  });
+  return { props: { csrfToken } };
+};
+
+export default function Login(props) {
   const router = useRouter();
   const ctx = useContext(Ctx);
   const [form, setForm] = useState({
@@ -31,7 +40,6 @@ export default function Login({ csrfToken }) {
     let option = {
       headers: {
         "Content-Type": "application/json",
-        "CSRF-Token": csrfToken,
       },
     };
 
@@ -74,7 +82,7 @@ export default function Login({ csrfToken }) {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <input type="hidden" name="_csrf" value={csrfToken} />
+        <input type="hidden" name="_csrf" value={props.csrfToken} />
         <div className="mb-4">
           <label
             className="block text-gray-700 font-medium mb-2"
@@ -121,7 +129,3 @@ export default function Login({ csrfToken }) {
     </div>
   );
 }
-
-export const getServerSideProps = setup(async ({ req, res }) => {
-  return { props: {} };
-});

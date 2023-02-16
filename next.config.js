@@ -5,20 +5,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/_next/:path*",
-        headers: [
-          {
-            key: "Access-Control-Allow-Origin",
-            value: "https://testm-main.vercel.app",
-          },
-        ],
-      },
-      {
         source: "/(.*)",
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "'https://testm-main.vercel.app', 'http://localhost:3000/'",
+            value: "https://testm-main.vercel.app, http://localhost:3000/",
           },
           {
             key: "X-Frame-Options",
@@ -31,6 +22,23 @@ const nextConfig = {
           {
             key: "Referrer-Policy",
             value: "origin-when-cross-origin",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+          },
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
           },
         ],
       },

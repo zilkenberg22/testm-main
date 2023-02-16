@@ -3,8 +3,19 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
+import { updateValidate } from "../tools/validate";
+import { csrfMiddleware } from "../tools/csrf";
 
-export default function Profile() {
+export const getServerSideProps = async (context) => {
+  const { req, res } = context;
+  let csrfToken;
+  csrfMiddleware(req, res, () => {
+    csrfToken = res.req.csrfToken;
+  });
+  return { props: { csrfToken } };
+};
+
+export default function Profile(props) {
   const ctx = useContext(Ctx);
   const { ctxData } = ctx;
   const [showEdit, setShowEdit] = useState(false);
@@ -21,6 +32,12 @@ export default function Profile() {
 
   function updateData() {
     const accessToken = Cookies.get("accessToken");
+
+    const err = updateValidate(newData);
+    if (err?.error) {
+      showMessage({ show: true, message: err.message, type: "warning" });
+      return;
+    }
 
     if (accessToken !== undefined) {
       let option = {
@@ -132,6 +149,7 @@ export default function Profile() {
       ) : (
         <div className="flex items-center justify-center">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <input type="hidden" name="_csrf" value={props.csrfToken} />
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-medium mb-2"
