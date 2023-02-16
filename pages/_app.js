@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import Context from "../context/Context";
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
     <div className="min-h-screen">
       <Context>
@@ -13,5 +13,3 @@ function MyApp({ Component, pageProps }) {
     </div>
   );
 }
-
-export default MyApp;

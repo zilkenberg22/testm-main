@@ -25,15 +25,15 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    // validate: {
-    //   validator: function (v) {
-    //     return /^(?=.\d)(?=.[a-z])(?=.[A-Z])(?=.[!@#$%^&*()+])[0-9a-zA-Z!@#$%^&()_+]{8,}$/.test(
-    //       v
-    //     );
-    //   },
-    //   message: (props) =>
-    //     ` Password must contain at least 8 characters including one uppercase, one lowercase, one number, and one special character!`,
-    // },
+    validate: {
+      validator: function (v) {
+        return /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/.test(
+          v
+        );
+      },
+      message: (props) =>
+        ` Password must contain at least 8 characters including one uppercase, one lowercase, one number, and one special character!`,
+    },
   },
   roles: {
     type: String,

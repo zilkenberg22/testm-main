@@ -50,9 +50,13 @@ export default function Login(props) {
         accessTokenTime.setTime(accessTokenTime.getTime() + 15 * 60 * 1000);
         Cookies.set("accessToken", response.data.accessToken, {
           expires: accessTokenTime,
+          secure: true,
+          HttpOnly: true,
         });
         Cookies.set("refreshToken", response.data.refreshToken, {
           expires: 1,
+          secure: true,
+          HttpOnly: true,
         });
         ctx.getUserData();
         setForm({ userName: "", email: "", password: "" });
