@@ -51,12 +51,10 @@ export default function Login(props) {
         Cookies.set("accessToken", response.data.accessToken, {
           expires: accessTokenTime,
           secure: true,
-          HttpOnly: true,
         });
         Cookies.set("refreshToken", response.data.refreshToken, {
           expires: 1,
           secure: true,
-          HttpOnly: true,
         });
         ctx.getUserData();
         setForm({ userName: "", email: "", password: "" });
