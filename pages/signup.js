@@ -4,6 +4,7 @@ import axios from "axios";
 import { signupValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { csrfMiddleware } from "../tools/csrf";
+import { showLoader } from "../components/Loader";
 
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
@@ -28,11 +29,12 @@ export default function Signup(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    showLoader(true);
     try {
       const err = signupValidate(form);
       if (err?.error) {
         showMessage({ show: true, message: err.message, type: "warning" });
+        showLoader(false);
         return;
       }
 
@@ -50,11 +52,13 @@ export default function Signup(props) {
             message: response.data.message,
             type: "success",
           });
+          showLoader(false);
           setForm({ userName: "", email: "", password: "" });
           router.push("/login");
         })
         .catch((error) => {
           if (error) {
+            showLoader(false);
             showMessage({
               show: true,
               message: error.response.data.message,
@@ -63,6 +67,7 @@ export default function Signup(props) {
           }
         });
     } catch (error) {
+      showLoader(false);
       showMessage({ show: true, message: error, type: "warning" });
     }
   }

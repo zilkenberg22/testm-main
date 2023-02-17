@@ -6,6 +6,7 @@ import { loginValidate } from "../tools/validate";
 import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
 import { csrfMiddleware } from "../tools/csrf";
+import { showLoader } from "../components/Loader";
 
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
@@ -30,10 +31,11 @@ export default function Login(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    showLoader(true);
     const err = loginValidate(form);
     if (err?.error) {
       showMessage({ show: true, message: err.message, type: "warning" });
+      showLoader(false);
       return;
     }
 
@@ -57,8 +59,10 @@ export default function Login(props) {
           secure: true,
         });
         ctx.getUserData();
-        setForm({ userName: "", email: "", password: "" });
 
+        setForm({ userName: "", email: "", password: "" });
+        showLoader(false);
+        console.log(response, "response");
         showMessage({
           show: true,
           message: response.data.message,
@@ -68,7 +72,9 @@ export default function Login(props) {
         router.push("/");
       })
       .catch((error) => {
+        console.log(error, "error");
         if (error) {
+          showLoader(false);
           showMessage({
             show: true,
             message: error.response.data.message,

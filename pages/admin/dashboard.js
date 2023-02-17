@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { showMessage } from "../../components/message";
 import { Ctx } from "../../context/Context";
+import { showLoader } from "../../components/Loader";
 
 export default function Dashboard() {
   const ctx = useContext(Ctx);
@@ -17,6 +18,7 @@ export default function Dashboard() {
   function getAllUser() {
     const accessToken = Cookies.get("accessToken");
     if (accessToken !== undefined) {
+      showLoader(true);
       axios
         .get("/api/admin/getAll", {
           headers: {
@@ -25,6 +27,7 @@ export default function Dashboard() {
         })
         .then((response) => {
           setUsers([...response.data.users]);
+          showLoader(false);
         })
         .catch((error) => {
           if (error.response?.status === 401) {
@@ -34,6 +37,7 @@ export default function Dashboard() {
               type: "warning",
             });
           }
+          showLoader(false);
         });
     } else ctx.clearAll();
   }
@@ -47,8 +51,8 @@ export default function Dashboard() {
     let newUser = user;
     newUser.roles = newRole;
     const accessToken = Cookies.get("accessToken");
-
     if (accessToken !== undefined) {
+      showLoader(true);
       let option = {
         headers: {
           "Content-Type": "application/json",
@@ -66,6 +70,7 @@ export default function Dashboard() {
             message: response.data.message,
             type: "success",
           });
+          showLoader(false);
           getAllUser();
         })
         .catch((error) => {
@@ -76,6 +81,7 @@ export default function Dashboard() {
               type: "warning",
             });
           }
+          showLoader(false);
         });
     } else ctx.clearAll();
   }

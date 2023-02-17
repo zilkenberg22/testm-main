@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Navbar from "../components/Navbar";
 import { showMessage } from "../components/message";
+import { showLoader } from "../components/Loader";
 export const Ctx = createContext({});
 
 export default function Context(props) {
@@ -41,6 +42,7 @@ export default function Context(props) {
     const accessToken = Cookies.get("accessToken");
 
     if (accessToken !== undefined) {
+      showLoader(true);
       axios
         .get("/api/user", {
           headers: {
@@ -50,6 +52,7 @@ export default function Context(props) {
         .then((res) => {
           ctxData.loggedUserData = res.data;
           changeCtxData();
+          showLoader(false);
         })
         .catch((err) => {
           showMessage({
@@ -57,6 +60,7 @@ export default function Context(props) {
             message: err.response.data.message,
             type: "warning",
           });
+          showLoader(false);
           clearAll();
         });
     }
@@ -68,6 +72,7 @@ export default function Context(props) {
       message: "Таны хандалтын эрх дууссан тул нэвтэрнэ үү ",
       type: "warning",
     });
+    showLoader(false);
     if (ctxData.isLogged) router.push("/login");
     else router.push("/");
     ctxData.loggedUserData = null;

@@ -5,6 +5,7 @@ import { showMessage } from "../components/message";
 import { Ctx } from "../context/Context";
 import { updateValidate } from "../tools/validate";
 import { csrfMiddleware } from "../tools/csrf";
+import { showLoader } from "../components/Loader";
 
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
@@ -31,11 +32,13 @@ export default function Profile(props) {
   }
 
   function updateData() {
+    showLoader(true);
     const accessToken = Cookies.get("accessToken");
 
     const err = updateValidate(newData);
     if (err?.error) {
       showMessage({ show: true, message: err.message, type: "warning" });
+      showLoader(false);
       return;
     }
 
@@ -58,8 +61,10 @@ export default function Profile(props) {
           });
           setShowEdit(false);
           setNewData({});
+          showLoader(false);
         })
         .catch((error) => {
+          showLoader(false);
           if (error.response.status === 403) {
             ctx.clearAll(error);
           } else {

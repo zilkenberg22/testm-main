@@ -9,6 +9,7 @@ export default function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </div>
         <div id="showMessage" />
+        <div id="showLoader" />
       </Context>
     </div>
   );
