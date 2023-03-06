@@ -62,7 +62,6 @@ export default function Login(props) {
 
         setForm({ userName: "", email: "", password: "" });
         showLoader(false);
-        console.log(response, "response");
         showMessage({
           show: true,
           message: response.data.message,
