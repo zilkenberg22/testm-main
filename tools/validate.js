@@ -25,7 +25,7 @@ function passwordValidate(password) {
 }
 
 function addressValidate(address) {
-  var re = /^[a-zA-Z0-9а-яА-Я-]+$/;
+  var re = /^(?!\s*$).+/;
   return {
     error: !re.test(address),
     message: "Хаяг шаардлага хангаагүй байна.",
